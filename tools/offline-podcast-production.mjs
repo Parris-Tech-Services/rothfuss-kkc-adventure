@@ -6,7 +6,7 @@ import assert from 'node:assert/strict';
 import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 const execute=promisify(execFile);
-const url=process.env.PRODUCTION_URL||'https://rothfuss-kkc-adventure.vercel.app/';
+const url=process.env.PRODUCTION_URL||'https://parris-tech-services.github.io/rothfuss-kkc-adventure/';
 const source=await readFile('public/podcast-data.js','utf8');
 const re=/\{ id: '([^']+)',(?: audio: "([^"]+)",)? title: (?:'([^']+)'|"([^"]+)"), show:/g;
 const episodes=[...source.matchAll(re)].map((m,index)=>({id:m[1],audio:m[2]||null,title:m[3]||m[4],index}));
