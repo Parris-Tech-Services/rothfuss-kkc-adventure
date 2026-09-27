@@ -19,6 +19,7 @@ const apiKey = process.env.GEMINI_API_KEY?.trim() ?? '';
 const useGemini = narrationMode === 'gemini' || (narrationMode === 'auto' && apiKey !== '');
 const narrator: NarrationProvider = useGemini ? new GeminiNarrator(apiKey) : new LocalNarrator();
 const port = Number(process.env.PORT ?? 3000);
+const host = process.env.HOST?.trim() || '127.0.0.1';
 const publicRoot = path.resolve(process.cwd(), 'public');
 
 runMigrations(db);
@@ -191,9 +192,9 @@ const maxPortAttempts = 5;
 let attempts = 0;
 
 function startServer(attemptPort: number): void {
-  server.listen(attemptPort, () => {
+  server.listen(attemptPort, host, () => {
     // eslint-disable-next-line no-console
-    console.log(`KKC Adventure web server is running at http://localhost:${attemptPort}`);
+    console.log(`KKC Adventure web server is running at http://${host}:${attemptPort}`);
   });
 }
 
