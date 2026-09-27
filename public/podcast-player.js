@@ -183,4 +183,4 @@ document.addEventListener('play', (event) => {
   if (isOpen && (media instanceof HTMLAudioElement || media instanceof HTMLVideoElement)) closePlayer();
 }, true);
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('/podcast-sw.js').catch(() => {});
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('./podcast-sw.js').catch(() => {});
