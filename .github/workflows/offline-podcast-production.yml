@@ -7,6 +7,12 @@ on:
       - 'public/podcast-data.js'
       - 'public/podcast-player.js'
       - 'public/podcast-sw.js'
+      - 'index.html'
+      - 'styles.css'
+      - 'app.js'
+      - 'podcast-data.js'
+      - 'podcast-player.js'
+      - 'podcast-sw.js'
       - 'tools/offline-podcast-production.mjs'
       - '.github/workflows/offline-podcast-production.yml'
 permissions:
