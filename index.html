@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KKC Adventure</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="app-header">
+        <div>
+          <h1>KKC Adventure</h1>
+          <p class="subtitle">A browser-front end for your Kingkiller Chronicle text adventure.</p>
+        </div>
+        <div class="info-bar">Type <strong>help</strong> or click a quick action to get started.</div>
+      </header>
+
+      <main class="layout-grid">
+        <section class="scene-panel">
+          <div class="panel-title">Scene</div>
+          <div id="output" class="scene-output"></div>
+        </section>
+
+        <aside class="sidebar-panel">
+          <div class="panel-title">Status</div>
+          <div class="status-grid">
+            <div><strong>Location</strong><div id="location"></div></div>
+            <div><strong>Time</strong><div id="time"></div></div>
+            <div><strong>Money</strong><div id="money"></div></div>
+            <div><strong>Rank</strong><div id="rank"></div></div>
+            <div><strong>Hunger</strong><div id="hunger"></div></div>
+            <div><strong>Warmth</strong><div id="warmth"></div></div>
+            <div><strong>Alar</strong><div id="alar"></div></div>
+            <div><strong>Exits</strong><div id="exits"></div></div>
+            <div><strong>Visible people</strong><div id="people"></div></div>
+          </div>
+
+          <div class="panel-title">Inventory</div>
+          <ul id="inventory" class="inventory-list"></ul>
+
+          <div class="panel-title">Quick actions</div>
+          <div id="quick-commands" class="command-buttons"></div>
+
+          <div class="panel-title">Map</div>
+          <div id="map" class="map-output">Your current location and exits will appear here.</div>
+
+          <div class="panel-title">Journal</div>
+          <div id="journal" class="journal-output">Your quest journal will appear here.</div>
+
+          <div class="panel-title history-title">
+            <span>History</span>
+            <button id="clear-history-button" type="button" class="secondary-button">Clear history</button>
+          </div>
+          <div id="history" class="history-list"></div>
+        </aside>
+      </main>
+
+      <footer class="command-panel">
+        <form id="command-form">
+          <input id="command-input" autocomplete="off" placeholder="Enter a command, e.g. help, look, go north" />
+          <button type="submit">Send</button>
+        </form>
+      </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script type="module" src="podcast-player.js?v=1"></script>
+  </body>
+</html>
