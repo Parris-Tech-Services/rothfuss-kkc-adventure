@@ -1,20 +1,6 @@
 name: KKC production offline podcasts
 on:
   workflow_dispatch:
-  push:
-    branches: [main]
-    paths:
-      - 'public/podcast-data.js'
-      - 'public/podcast-player.js'
-      - 'public/podcast-sw.js'
-      - 'index.html'
-      - 'styles.css'
-      - 'app.js'
-      - 'podcast-data.js'
-      - 'podcast-player.js'
-      - 'podcast-sw.js'
-      - 'tools/offline-podcast-production.mjs'
-      - '.github/workflows/offline-podcast-production.yml'
 permissions:
   contents: read
 concurrency:
@@ -73,3 +59,4 @@ jobs:
         with:
           name: kkc-offline-evidence-${{ strategy.job-index }}
           path: offline-evidence/
+          retention-days: 1
