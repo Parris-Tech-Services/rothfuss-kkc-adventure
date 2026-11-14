@@ -27,7 +27,7 @@ const save = () => {
 
 const style = document.createElement('style');
 style.textContent = `
-  #kkc-podcast-launcher{position:fixed;left:14px;bottom:max(14px,env(safe-area-inset-bottom));z-index:2147483000;border:1px solid #8a6a3e;border-radius:999px;background:#20170f;color:#f8ecd4;padding:11px 16px;font:700 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 12px 34px rgba(0,0,0,.42);cursor:pointer;touch-action:manipulation}
+  #kkc-podcast-launcher{position:fixed;left:14px;bottom:calc(max(14px,env(safe-area-inset-bottom)) + var(--kkc-dock,0px));z-index:2147483000;border:1px solid #8a6a3e;border-radius:999px;background:#20170f;color:#f8ecd4;padding:11px 16px;font:700 14px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;box-shadow:0 12px 34px rgba(0,0,0,.42);cursor:pointer;touch-action:manipulation}
   #kkc-podcast-panel{position:fixed;left:10px;bottom:max(10px,env(safe-area-inset-bottom));z-index:2147483001;width:min(560px,calc(100vw - 20px));box-sizing:border-box;border:1px solid #8a6a3e;border-radius:16px;background:#1a130d;color:#f8ecd4;padding:13px;box-shadow:0 20px 55px rgba(0,0,0,.58);font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
   #kkc-podcast-panel[hidden]{display:none!important}.kkc-podcast-head{display:flex;gap:12px;justify-content:space-between;align-items:flex-start}.kkc-podcast-kicker{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#d7b274}.kkc-podcast-title{margin:4px 0 0;font-size:16px;line-height:1.3}.kkc-podcast-meta{margin:5px 0 0;color:#d8c7ac;font-size:12px;line-height:1.4}.kkc-podcast-close{width:38px;height:38px;flex:0 0 38px;border:1px solid #7d6442;border-radius:50%;background:#302317;color:#fff;font-size:22px;cursor:pointer;touch-action:manipulation}.kkc-podcast-frame{display:block;width:100%;height:152px;border:0;border-radius:12px;background:#080603;margin-top:10px}.kkc-podcast-audio{display:block;width:100%;margin-top:10px}.kkc-podcast-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.kkc-podcast-action,.kkc-podcast-link,.kkc-podcast-offline{border-radius:10px;padding:9px 12px;font:700 13px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;text-decoration:none;cursor:pointer;touch-action:manipulation}.kkc-podcast-action{border:0;background:#765126;color:#fff}.kkc-podcast-offline{border:0;background:#315c42;color:#fff}.kkc-podcast-offline:disabled{opacity:.65;cursor:wait}.kkc-podcast-link{display:inline-flex;align-items:center;border:1px solid #7d6442;background:#302317;color:#fff}.kkc-podcast-note{margin:9px 0 0;color:#bfae93;font-size:11px}
   @media(max-width:640px){#kkc-podcast-panel{left:5px;width:calc(100vw - 10px);padding:11px}.kkc-podcast-actions>*{flex:1;justify-content:center;text-align:center}}
@@ -42,6 +42,27 @@ launcher.setAttribute('aria-label', 'Open fantasy and books podcasts');
 launcher.setAttribute('aria-expanded', 'false');
 
 document.body.appendChild(launcher);
+
+// The game's command bar is sticky at the bottom of the viewport. Lift the launcher
+// by however much the bar currently covers so it never sits on the input or Send.
+const dockTarget = document.querySelector('.command-panel');
+if (dockTarget) {
+  let queued = false;
+  const updateDock = () => {
+    queued = false;
+    const covered = Math.max(0, Math.round(window.innerHeight - dockTarget.getBoundingClientRect().top));
+    document.documentElement.style.setProperty('--kkc-dock', covered ? `${covered + 8}px` : '0px');
+  };
+  const scheduleDock = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(updateDock);
+  };
+  window.addEventListener('scroll', scheduleDock, { passive: true });
+  window.addEventListener('resize', scheduleDock);
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleDock).observe(dockTarget);
+  updateDock();
+}
 
 const panel = document.createElement('aside');
 panel.id = 'kkc-podcast-panel';
