@@ -3,11 +3,15 @@ import { podcastEpisodes } from './podcast-data.js';
 const STORAGE_KEY = 'kkc-adventure-podcast-v1';
 const AUDIO_CACHE = 'kkc-podcast-audio-v1';
 const RECENT_LIMIT = 6;
+const PREF_KEY = 'kkc-adventure-podcasts-enabled-v1';
 
 let currentIndex = 0;
 let recent = [];
 let isOpen = false;
 let offlineState = 'streaming';
+// Off by default: podcasts should not distract from the game unless asked for in Settings.
+let enabled = false;
+try { enabled = localStorage.getItem(PREF_KEY) === '1'; } catch (_) {}
 
 try {
   const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
@@ -190,7 +194,7 @@ function openPlayer() {
 function closePlayer() {
   isOpen = false;
   panel.hidden = true;
-  launcher.hidden = false;
+  launcher.hidden = !enabled;
   launcher.setAttribute('aria-expanded', 'false');
   media.innerHTML = '';
 }
@@ -204,4 +208,25 @@ document.addEventListener('play', (event) => {
   if (isOpen && (media instanceof HTMLAudioElement || media instanceof HTMLVideoElement)) closePlayer();
 }, true);
 
-if ('serviceWorker' in navigator) navigator.serviceWorker.register('./podcast-sw.js').catch(() => {});
+let workerRegistered = false;
+
+function applyEnabled() {
+  if (!enabled) {
+    if (isOpen) closePlayer();
+    launcher.hidden = true;
+    return;
+  }
+  launcher.hidden = isOpen;
+  if (!workerRegistered && 'serviceWorker' in navigator) {
+    workerRegistered = true;
+    navigator.serviceWorker.register('./podcast-sw.js').catch(() => {});
+  }
+  window.dispatchEvent(new Event('resize'));
+}
+
+window.addEventListener('kkc-podcasts-pref', (event) => {
+  enabled = Boolean(event.detail);
+  applyEnabled();
+});
+
+applyEnabled();

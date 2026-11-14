@@ -13,7 +13,18 @@
           <h1>KKC Adventure</h1>
           <p class="subtitle">A browser-front end for your Kingkiller Chronicle text adventure.</p>
         </div>
-        <div class="info-bar">Type <strong>help</strong> or click a quick action to get started.</div>
+        <div class="header-side">
+          <div class="info-bar">Type <strong>help</strong> or click a quick action to get started.</div>
+          <div class="settings-wrap">
+            <button id="settings-button" type="button" class="secondary-button" aria-haspopup="true" aria-expanded="false" aria-controls="settings-panel">&#9881; Settings</button>
+            <div id="settings-panel" class="settings-panel" role="group" aria-label="Settings" hidden>
+              <label class="settings-row">
+                <input id="setting-podcasts" type="checkbox" />
+                <span><strong>Podcast player</strong><small>Off by default so it stays out of the game. Turn on to show the &#127911; Podcasts button.</small></span>
+              </label>
+            </div>
+          </div>
+        </div>
       </header>
 
       <main class="layout-grid">
@@ -65,6 +76,7 @@
     </div>
 
     <script src="app.js"></script>
+    <script src="settings.js"></script>
     <script type="module" src="podcast-player.js?v=1"></script>
   </body>
 </html>
